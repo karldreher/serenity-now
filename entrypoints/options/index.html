@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Options Title</title>
+        <!-- For some reason, as written, this is a must-have. (non-tab doesn't have a real script?) -->
+        <meta name="manifest.open_in_tab" content="true" />
+    </head>
+    <body>
+        <textarea id="options_ignores" rows="20" cols="50"></textarea>
+        <button id="options_save">Save</button>
+        <script type="module">
+            // Can't figure out how to modular-ly import this from another file. ¯\_o_/¯
+            document.getElementById("options_ignores").value = localStorage.getItem(
+                "local:ignores"
+            );
+            document.getElementById("options_save").onclick = () => {
+                localStorage.setItem(
+                    "local:ignores",
+                    document.getElementById("options_ignores").value
+                );
+                console.log("Saved options.");
+            };
+        </script>
+    </body>
+</html>
