@@ -1,34 +1,13 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Serenity Now</title>
-        <!-- For some reason, as written, this is a must-have. (non-tab doesn't have a real script?) -->
-        <meta name="manifest.open_in_tab" content="true" />
-    </head>
-    <body>
-        <textarea id="options_ignores" rows="20" cols="50"></textarea>
-        <button id="options_save">Save</button>
-        <script type="module">
-            import { storage } from '@wxt-dev/storage';
-            
-            const textarea = document.getElementById("options_ignores");
-            
-            async function loadOptions() {
-                const savedValue = await storage.getItem("local:ignores");
-                textarea.value = Array.isArray(JSON.parse(savedValue || '[]')) 
-                    ? JSON.parse(savedValue).join('\n') 
-                    : '';
-            }
-            
-            loadOptions();
-            
-            document.getElementById("options_save").onclick = async () => {
-                const ignores = textarea.value.split('\n').filter(x => x.trim());
-                await storage.setItem("local:ignores", JSON.stringify(ignores));
-                console.log("Saved options:", ignores);
-            };
-        </script>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serenity Now - Options</title>
+    <meta name="manifest.open_in_tab" content="true" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.tsx"></script>
+  </body>
 </html>
