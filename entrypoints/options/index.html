@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Options Title</title>
+        <title>Serenity Now</title>
         <!-- For some reason, as written, this is a must-have. (non-tab doesn't have a real script?) -->
         <meta name="manifest.open_in_tab" content="true" />
     </head>
@@ -11,16 +11,23 @@
         <textarea id="options_ignores" rows="20" cols="50"></textarea>
         <button id="options_save">Save</button>
         <script type="module">
-            // Can't figure out how to modular-ly import this from another file. ¯\_o_/¯
-            document.getElementById("options_ignores").value = localStorage.getItem(
-                "local:ignores"
-            );
-            document.getElementById("options_save").onclick = () => {
-                localStorage.setItem(
-                    "local:ignores",
-                    document.getElementById("options_ignores").value
-                );
-                console.log("Saved options.");
+            import { storage } from '@wxt-dev/storage';
+            
+            const textarea = document.getElementById("options_ignores");
+            
+            async function loadOptions() {
+                const savedValue = await storage.getItem("local:ignores");
+                textarea.value = Array.isArray(JSON.parse(savedValue || '[]')) 
+                    ? JSON.parse(savedValue).join('\n') 
+                    : '';
+            }
+            
+            loadOptions();
+            
+            document.getElementById("options_save").onclick = async () => {
+                const ignores = textarea.value.split('\n').filter(x => x.trim());
+                await storage.setItem("local:ignores", JSON.stringify(ignores));
+                console.log("Saved options:", ignores);
             };
         </script>
     </body>

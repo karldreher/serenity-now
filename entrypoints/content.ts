@@ -1,3 +1,10 @@
+import { storage } from '@wxt-dev/storage';
+
+/**
+ * Handlers are site-specific.  
+ * Given a string, it will remove posts from Reddit during browsing that match the string.
+ * @param ignore 
+ */
 async function redditHandler(ignore: string) {
   let d = document.getElementsByTagName("article");
 
@@ -12,23 +19,37 @@ async function redditHandler(ignore: string) {
 
 async function getOptions(): Promise<string[]> {
   try {
-    const ignores = await storage.getItem('local:ignores');
-    console.log(ignores);
-    if (Array.isArray(ignores)) {
-      return ignores;
+    const ignoresStr = await storage.getItem('local:ignores');
+    console.debug('Raw ignores:', ignoresStr);
+    
+    // If we have a string, try to parse it
+    if (typeof ignoresStr === 'string') {
+      try {
+        const ignores = JSON.parse(ignoresStr);
+        if (Array.isArray(ignores)) {
+          return ignores;
+        }
+      } catch (e) {
+        console.debug('Failed to parse ignores:', e);
+        // Reset storage to empty array on parse error
+        await storage.setItem('local:ignores', JSON.stringify([]));
+      }
+    } else {
+      // Initialize storage if it's empty
+      await storage.setItem('local:ignores', JSON.stringify([]));
     }
-  } catch {
-    return [];
+  } catch (e) {
+    console.debug('Failed to get ignores:', e);
   }
   return [];
 }
 
-export default defineContentScript({
-  matches: ['*://*.google.com/*', '*://*.reddit.com/*'],
-  world: 'MAIN',
+export default {
+  matches: ['*://*.reddit.com/*'],
+  world: 'ISOLATED',
   async main() {
-    console.log("content script loaded");
     const observer = new MutationObserver(async () => {
+      //TODO can we only get options on content load?
       const options = await getOptions();
       console.log(options)
       // TODO: make sure each handler only called on the specific origin
@@ -39,4 +60,4 @@ export default defineContentScript({
 
     observer.observe(document.body, { childList: true, subtree: true });
   }
-});
+};
