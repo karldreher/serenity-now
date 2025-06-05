@@ -51,7 +51,7 @@ export default {
     const observer = new MutationObserver(async () => {
       //TODO can we only get options on content load?
       const options = await getOptions();
-      console.log(options)
+      console.debug(options)
       // TODO: make sure each handler only called on the specific origin
       options.forEach(ignore => {
       redditHandler(ignore);

@@ -1,6 +1,6 @@
 # serenity-now
 
-Take back social media.  
+*Take back social media.*
 
 # Overview
 
