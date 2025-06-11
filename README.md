@@ -17,7 +17,7 @@ With Serenity Now, you *can*.
 Imagine you love Reddit but can't stand reading *again and again* about your least favorite topic.  
 Using the extension, simply add items to the list, and they will be blocked in your news feed.  
 
-# :warning: Black Box Mental Health Warning :black_square:
+# :warning: Black Box Mental Health Warning :black_circle:
 
 This extension is released as a proof-of-concept especially as a way to edit page content while under the permission context of Chrome extension manifest `v3`.  
 
